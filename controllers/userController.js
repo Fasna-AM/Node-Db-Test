@@ -19,7 +19,7 @@ exports.registerController = async(req,res)=>{
             res.status(406).json("Already existing user .....")
         }else{
             const salt = await bcrypt.genSalt(10)
-            const hashedPassword = await bcrypt.hash(password,salt)
+            const hashedPassword = await bcrypt.hash(password,salt)     // const hashedPassword = await bcrypt.hash(password,10) 
             const newUser = new users({
                 userId,firstName,lastName,email,password:hashedPassword,phone
             })
@@ -76,7 +76,7 @@ exports.allUserController = async(req,res)=>{
     console.log("inside allUserController");
     try{
         const allUsers = await users.find()
-        res.status(200).json(allUsers)
+        res.status(200).json(allUsers.map(user=>({firstName:user.firstName,lastName:user.lastName,email:user.email,phone:user.phone})))
 
     }catch(err){
         res.status(401).json(err)
